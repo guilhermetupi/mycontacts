@@ -3,9 +3,9 @@ const ContactsRepository = require('../repositories/ContactsRepository');
 class ContactController {
   // Listar tudo
   async index(req, res) {
-    const contacs = await ContactsRepository.findAll();
+    const contacts = await ContactsRepository.findAll();
 
-    res.json(contacs);
+    res.json(contacts);
   }
 
   // Item especifico
@@ -16,13 +16,45 @@ class ContactController {
   }
 
   // Adicionar
-  store() { }
+  async store(req, res) {
+    const {
+      name, phone, email, category_id,
+    } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+
+    const contactExists = await ContactsRepository.findByEmail(email);
+
+    if (contactExists) {
+      return res.status(400).json({ error: 'This e-mail is already in use' });
+    }
+
+    const contact = await ContactsRepository.create({
+      name, phone, email, category_id,
+    });
+
+    res.json(contact);
+  }
 
   // Atualizar
   update() { }
 
   // Deletar
-  delete() { }
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const contact = await ContactsRepository.findById(id);
+
+    if (!contact) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    await ContactsRepository.delete(id);
+
+    return res.sendStatus(204);
+  }
 }
 
 module.exports = new ContactController();

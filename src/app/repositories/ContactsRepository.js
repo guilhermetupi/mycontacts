@@ -1,6 +1,6 @@
 const { v4: uuid } = require('uuid');
 
-const contacts = [
+let contacts = [
   {
     id: uuid(),
     name: 'Pâmela',
@@ -28,6 +28,31 @@ class ContactsRepository {
 
   findByEmail() {
 
+  }
+
+  delete(id) {
+    return new Promise((res) => {
+      contacts = contacts.filter((contact) => contact.id !== id);
+      res();
+    });
+  }
+
+  create({
+    name, phone, email, category_id,
+  }) {
+    return new Promise((res) => {
+      const newContact = {
+        id: uuid(),
+        name,
+        email,
+        phone,
+        category_id,
+      };
+
+      contacts.push(newContact);
+
+      res(newContact);
+    });
   }
 }
 
