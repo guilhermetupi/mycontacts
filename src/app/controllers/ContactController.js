@@ -39,7 +39,34 @@ class ContactController {
   }
 
   // Atualizar
-  update() { }
+  async update(req, res) {
+    const { id } = req.params;
+    const {
+      name, phone, email, category_id,
+    } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+
+    const contactExists = await ContactsRepository.findById(id);
+
+    if (!contactExists) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    const contactEmailExists = await ContactsRepository.findByEmail(email);
+
+    if (contactEmailExists && id !== contactExists.id) {
+      return res.status(400).json({ error: 'This e-mail is already in use' });
+    }
+
+    const contact = await ContactsRepository.update(id, {
+      name, phone, email, category_id,
+    });
+
+    res.json(contact);
+  }
 
   // Deletar
   async delete(req, res) {

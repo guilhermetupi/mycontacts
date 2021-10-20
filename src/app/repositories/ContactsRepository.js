@@ -54,6 +54,24 @@ class ContactsRepository {
       res(newContact);
     });
   }
+
+  update(id, {
+    name, phone, email, category_id,
+  }) {
+    return new Promise((res) => {
+      const updatedContact = {
+        id: uuid(),
+        name,
+        email,
+        phone,
+        category_id,
+      };
+
+      contacts = contacts.map((contact) => (contact.id === id ? updatedContact : contact));
+
+      res(updatedContact);
+    });
+  }
 }
 
 module.exports = new ContactsRepository();
