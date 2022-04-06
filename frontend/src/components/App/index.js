@@ -3,7 +3,7 @@ import { Container } from './styles';
 import GlobalStyled from '../../assets/styles/global';
 import defaultTheme from '../../assets/styles/themes/default';
 import Header from '../Header';
-import ContactsList from '../ContactsList';
+import Routes from '../../routes';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <GlobalStyled />
       <Container>
         <Header />
-        <ContactsList />
+        <Routes />
       </Container>
     </ThemeProvider>
   );
