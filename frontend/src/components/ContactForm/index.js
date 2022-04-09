@@ -11,15 +11,35 @@ export default function ContactForm({ buttonLabel }) {
   const [email, setEmail] = useState('');
   const [telephone, setTelephone] = useState('');
   const [category, setCategory] = useState('');
+  const [errors, setErrors] = useState([]);
 
-  const handleName = (e) => setName(e.target.value);
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handleTelephone = (e) => setTelephone(e.target.value);
-  const handleCategory = (e) => setCategory(e.target.value);
+  function handleName(e) {
+    setName(e.target.value);
 
-  const handleSubmit = (e) => {
+    if (!e.target.value) {
+      setErrors((prevState) => [...prevState, { field: 'name', message: 'Nome é obrigatório.' }]);
+    } else {
+      setErrors((prevState) => prevState.filter(
+        (error) => error.field !== 'name',
+      ));
+    }
+  }
+
+  function handleEmail(e) {
+    setEmail(e.target.value);
+  }
+
+  function handleTelephone(e) {
+    setTelephone(e.target.value);
+  }
+
+  function handleCategory(e) {
+    setCategory(e.target.value);
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
-  };
+  }
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -47,7 +67,7 @@ export default function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <ButtonContainer>
-        <Button type="submit">{buttonLabel}</Button>
+        <Button type="submit" disabled={errors.length}>{buttonLabel}</Button>
       </ButtonContainer>
     </Form>
   );
