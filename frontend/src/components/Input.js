@@ -12,17 +12,22 @@ export default styled.input`
   font-size: 16px;
   transition: border-color 0.2s ease-in;
 
-  &:focus{
+  &:focus {
     border: 2px solid ${({ theme }) => theme.colors.primary.main};
   }
 
-${({ theme, error }) => error
-  && css`
-    color: ${theme.colors.danger.main};
-    border-color: ${theme.colors.danger.main};
+  ${({ theme, error }) =>
+    error &&
+    css`
+      color: ${theme.colors.danger.main};
+      border-color: ${theme.colors.danger.main};
 
-    &::placeholder {
-      color: ${theme.colors.danger.light};
-    }
-  `}
+      &:focus {
+        border-color: ${theme.colors.danger.main};
+      }
+
+      &::placeholder {
+        color: ${theme.colors.danger.light};
+      }
+    `}
 `;
