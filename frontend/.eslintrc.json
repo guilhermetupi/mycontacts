@@ -3,12 +3,19 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:react/recommended", "airbnb"],
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
     "ecmaVersion": "latest",
+    "requireConfigFile": false,
     "sourceType": "module"
   },
   "plugins": ["react"],
@@ -20,6 +27,7 @@
     "implicit-arrow-linebreak": "off",
     "comma-dangle": "off",
     "function-paren-newline": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "object-curly-newline": "off"
   }
 }

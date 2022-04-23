@@ -1,97 +1,75 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { ButtonContainer, Form } from './styles';
-import FormGroup from '../FormGroup';
-import Button from '../Button';
-import Input from '../Input';
-import Select from '../Select';
-import isEmailValid from '../../utils/isEmailValid';
+import { useState } from 'react'
+import PropTypes from 'prop-types'
+import { ButtonContainer, Form } from './styles'
+import FormGroup from '../FormGroup'
+import Button from '../Button'
+import Input from '../Input'
+import Select from '../Select'
+import isEmailValid from '../../utils/isEmailValid'
+import formatPhone from '../../utils/formatPhone'
+import useErrors from '../../hooks/useErrors'
 
 export default function ContactForm({ buttonLabel }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [telephone, setTelephone] = useState('');
-  const [category, setCategory] = useState('');
-  const [errors, setErrors] = useState([]);
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [category, setCategory] = useState('')
+  const { setError, removeError, getErrorByFieldName, errors } = useErrors()
+
+  const isFormValid = name && !errors.length
 
   function handleNameChange(e) {
-    setName(e.target.value);
+    setName(e.target.value)
 
     if (!e.target.value) {
-      setErrors((prevState) => [
-        ...prevState,
-        { field: 'name', message: 'Nome é obrigatório.' },
-      ]);
+      setError({ field: 'name', message: 'Nome é obrigatório.' })
     } else {
-      setErrors((prevState) =>
-        prevState.filter((error) => error.field !== 'name')
-      );
+      removeError('name')
     }
   }
 
   function handleEmailChange(e) {
-    setEmail(e.target.value);
+    setEmail(e.target.value)
 
     if (e.target.value && !isEmailValid(e.target.value)) {
-      const errorAlreadyExists = errors.find(
-        (error) => error.field === 'email'
-      );
-
-      if (errorAlreadyExists) {
-        return;
-      }
-
-      setErrors((prevState) => [
-        ...prevState,
-        { field: 'email', message: 'E-mail inválido.' },
-      ]);
+      setError({ field: 'email', message: 'E-mail inválido.' })
     } else {
-      setErrors((prevState) =>
-        prevState.filter((error) => error.field !== 'email')
-      );
+      removeError('name')
     }
   }
 
-  function handleTelephoneChange(e) {
-    setTelephone(e.target.value);
+  function handlePhoneChange(e) {
+    setPhone(formatPhone(e.target.value))
   }
 
   function handleCategoryChange(e) {
-    setCategory(e.target.value);
+    setCategory(e.target.value)
   }
 
   function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
 
     console.log({
       name,
       email,
-      telephone,
+      phone,
       category,
-    });
-  }
-
-  function getErrorMessageByFieldName(fieldName) {
-    return errors.find((error) => error.field === fieldName)?.message;
-  }
-
-  function getErrorByFieldName(fieldName) {
-    return errors.find((error) => error.field === fieldName);
+    })
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup error={getErrorMessageByFieldName('name')}>
+    <Form onSubmit={handleSubmit} noValidate>
+      <FormGroup error={getErrorByFieldName('name')?.message}>
         <Input
           type="text"
-          placeholder="Nome"
+          placeholder="Nome *"
           error={getErrorByFieldName('name')}
           value={name}
           onChange={handleNameChange}
         />
       </FormGroup>
 
-      <FormGroup error={getErrorMessageByFieldName('email')}>
+      <FormGroup error={getErrorByFieldName('email')?.message}>
         <Input
           type="email"
           placeholder="E-mail"
@@ -105,8 +83,9 @@ export default function ContactForm({ buttonLabel }) {
         <Input
           type="text"
           placeholder="Telefone"
-          value={telephone}
-          onChange={handleTelephoneChange}
+          value={phone}
+          onChange={handlePhoneChange}
+          maxLength="15"
         />
       </FormGroup>
 
@@ -122,14 +101,14 @@ export default function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <ButtonContainer>
-        <Button type="submit" disabled={errors.length}>
+        <Button type="submit" disabled={!isFormValid}>
           {buttonLabel}
         </Button>
       </ButtonContainer>
     </Form>
-  );
+  )
 }
 
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
-};
+}

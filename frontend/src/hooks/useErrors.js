@@ -1,0 +1,39 @@
+import { useState } from 'react'
+
+function useHooks() {
+  const [errors, setErrors] = useState([])
+
+  function setError({ field, message }) {
+    const errorAlreadyExists = errors.find((error) => error.field === field)
+
+    if (errorAlreadyExists) {
+      return
+    }
+
+    setErrors((prevState) => [...prevState, { field, message }])
+  }
+
+  function removeError(fieldName) {
+    setErrors((prevState) =>
+      prevState.filter((error) => error.field !== fieldName)
+    )
+  }
+
+  function getErrorMessageByFieldName(fieldName) {
+    return errors.find((error) => error.field === fieldName)?.message
+  }
+
+  function getErrorByFieldName(fieldName) {
+    return errors.find((error) => error.field === fieldName)
+  }
+
+  return {
+    setError,
+    removeError,
+    getErrorByFieldName,
+    getErrorMessageByFieldName,
+    errors,
+  }
+}
+
+export default useHooks

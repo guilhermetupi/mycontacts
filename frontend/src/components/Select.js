@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export default styled.select`
   width: 100%;
@@ -11,8 +11,9 @@ export default styled.select`
   padding: 0 16px;
   font-size: 16px;
   transition: border-color 0.2s ease-in;
+  appearance: none;
 
   &:focus {
     border: 2px solid ${({ theme }) => theme.colors.primary.main};
   }
-`;
+`
